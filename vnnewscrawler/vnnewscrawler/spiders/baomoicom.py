@@ -17,14 +17,20 @@ class BaomoicomSpider(Spider):
     article_code_regex = regex.compile(r"\/c\/(\d+)\.epi", flags=regex.IGNORECASE)
 
     def start_requests(self):
-        yield Request(url=self.home_url, callback=self.follow_categories)
+        yield Request(
+            url=self.home_url,
+            callback=self.follow_categories,
+            meta={"skip-dupfilter": True},
+        )
 
     def follow_categories(self, response):
         category_urls = response.css("li[class*=child] > a::attr(href)").extract()
 
         for category_url in category_urls:
             yield Request(
-                url=response.urljoin(category_url), callback=self.follow_articles
+                url=response.urljoin(category_url),
+                callback=self.follow_articles,
+                meta={"skip-dupfilter": True},
             )
 
     def follow_articles(self, response):
@@ -43,7 +49,9 @@ class BaomoicomSpider(Spider):
 
         if next_page_url:
             yield Request(
-                url=response.urljoin(next_page_url), callback=self.follow_articles
+                url=response.urljoin(next_page_url),
+                callback=self.follow_articles,
+                meta={"skip-dupfilter": True},
             )
 
     def parse_article(self, response):

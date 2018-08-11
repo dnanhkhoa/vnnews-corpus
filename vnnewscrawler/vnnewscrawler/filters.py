@@ -40,7 +40,8 @@ class DupeFilter(RFPDupeFilter):
         )
 
     def request_seen(self, request):
-        fp = self.request_fingerprint(request)
-        if fp in self.fingerprints:
-            return True
-        self.fingerprints.add(fp)
+        if not request.meta.get("skip-dupfilter", False):
+            fp = self.request_fingerprint(request)
+            if fp in self.fingerprints:
+                return True
+            self.fingerprints.add(fp)

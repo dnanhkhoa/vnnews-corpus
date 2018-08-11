@@ -6,7 +6,7 @@
 # https://doc.scrapy.org/en/latest/topics/items.html
 
 from scrapy import Item, Field
-from scrapy.contrib.loader import ItemLoader
+from scrapy.loader import ItemLoader
 from scrapy.loader.processors import MapCompose, Join
 
 
