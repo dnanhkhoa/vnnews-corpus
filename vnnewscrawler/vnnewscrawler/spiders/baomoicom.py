@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-import json
+
 import regex
-import dateutil.parser
 from scrapy import Spider, Request
-from ..items import Article
+from ..items import ArticleLoader
 
 
 class BaomoicomSpider(Spider):
@@ -44,46 +43,5 @@ class BaomoicomSpider(Spider):
             )
 
     def parse_article(self, response):
-        article_url = response.url
-
-        code_matcher = self.article_code_regex.search(article_url)
-        code = code_matcher and code_matcher.group(1)
-
-        category = response.css(
-            "meta[property*=section]::attr(content)"
-        ).extract_first()
-        category = category and category.strip()
-
-        content = "\n".join(
-            ["".join(p.css("::text").extract()).strip() for p in response.css(".body-text")]
-        )
-
-        article_info = json.loads(
-            response.css("script[type='application/ld+json']::text").extract_first(
-                default="{}"
-            )
-        )
-
-        source = article_info.get("author")
-        source = source and source.get("name")
-        source = source and source.strip()
-
-        headline = article_info.get("headline")
-        headline = headline and headline.strip()
-
-        description = article_info.get("description")
-        description = description and description.strip()
-
-        time = article_info.get("dateModified")
-        time = time and dateutil.parser.parse(time.strip()).replace(tzinfo=None)
-
-        yield Article(
-            code=code,
-            url=article_url,
-            source=source,
-            category=category,
-            headline=headline,
-            description=description,
-            content=content,
-            time=time,
-        )
+        article_loader = ArticleLoader(response=response)
+        yield article_loader.load_item()
