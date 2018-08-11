@@ -1,3 +1,6 @@
 scrapy
+jmespath
+beautifulsoup4
+lxml
 regex
 simplebloomfilter
