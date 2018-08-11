@@ -1,0 +1,7 @@
+scrapy <command> [options] [args]
+scrapy startproject <name> [dir]
+scrapy genspider <name> <domain>
+scrapy crawl <name> -s JOBDIR=<dir>
+scrapy parse <url> --spider <name> -c <callback>
+scrapy shell <url>
+telnet localhost 6023 -> prefs()
