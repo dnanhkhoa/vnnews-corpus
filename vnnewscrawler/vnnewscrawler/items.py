@@ -7,6 +7,7 @@
 
 from scrapy import Item, Field
 from scrapy.contrib.loader import ItemLoader
+from scrapy.loader.processors import MapCompose, Join
 
 
 class Article(Item):
@@ -22,3 +23,5 @@ class Article(Item):
 
 class ArticleLoader(ItemLoader):
     default_item_class = Article
+    default_input_processor = MapCompose(str.strip)
+    default_output_processor = Join()
