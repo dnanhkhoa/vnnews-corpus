@@ -3,4 +3,5 @@ jmespath
 beautifulsoup4
 lxml
 regex
+unidecode
 simplebloomfilter
